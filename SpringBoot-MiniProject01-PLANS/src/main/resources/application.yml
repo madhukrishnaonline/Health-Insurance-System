@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    password: krishna
+    url: jdbc:h2:mem:testdb
+    username: krishna
+
+plans-api:
+  messages:
+    planregsucc: Plans Registered Successfully
+    planregfail: Plans Registered Failed
+    planupdatesucc: Plan Details Updated Successfully
+    planupdatefail: Plan Details Not Updated
+    plandeletesucc: Plan Deleted Successfully
+    plandeletefail: Plan Not Deleted
+  
