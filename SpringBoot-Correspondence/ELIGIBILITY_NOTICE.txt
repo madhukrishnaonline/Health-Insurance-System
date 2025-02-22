@@ -1,0 +1,12 @@
+<center>
+	<h3> Hi {FULLNAME}</h3> <br>
+	Your Eligibility Plan Regarding the {PLAN} has been {PLANSTATUS}.
+	<br>
+	To See More Details about your plan checkout the below document.
+	<br>
+	<br>
+</center>
+<br>
+<br>
+Thank You !<br>
+Central Govt. New Jersy.
