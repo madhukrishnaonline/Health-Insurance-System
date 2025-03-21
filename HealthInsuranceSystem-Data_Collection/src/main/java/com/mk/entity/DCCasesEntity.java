@@ -1,5 +1,6 @@
 package com.mk.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,10 +14,13 @@ import lombok.Data;
 public class DCCasesEntity {
 
 	@Id
+	@Column(name="CASE_NUM")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long caseNum;
 
+	@Column(name="APP_ID")
 	private Integer appId;
 
+	@Column(name="PLAN_ID")
 	private Integer planId;
 }//class

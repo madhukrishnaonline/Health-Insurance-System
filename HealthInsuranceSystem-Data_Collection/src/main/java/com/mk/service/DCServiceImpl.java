@@ -53,22 +53,25 @@ public class DCServiceImpl implements IDCService {
 	@Override
 	public Long loadCaseNumber(Integer appId) {
 		Optional<CitizenAppEntity> byId = citizenAppRepository.findById(appId);
+		Optional<DCCasesEntity> byId2 = casesRepository.findById(appId);
 		if (byId.isPresent()) {
 			DCCasesEntity entity = new DCCasesEntity();
-			entity.setAppId(appId);
-			entity = casesRepository.save(entity);
-
-			return entity.getCaseNum();
+			if (byId2.isEmpty()) {
+				entity.setAppId(appId);
+				entity = casesRepository.save(entity);
+				return entity.getCaseNum();
+			} //inner if
+			return byId2.get().getCaseNum();
 		} //if
-		return 0l;
+		return null;
 	}//loadCaseNumber
 
 	@Override
-	public Map<Integer,String> getPlanNames() {
+	public Map<Integer, String> getPlanNames() {
 		List<PlanEntity> all = planRepository.findAll();
-		Map<Integer,String> map = new HashMap<>();
-		all.forEach(data->{
-			map.put(data.getPlanId(),data.getPlanName());
+		Map<Integer, String> map = new HashMap<>();
+		all.forEach(data -> {
+			map.put(data.getPlanId(), data.getPlanName());
 		});
 		return map;
 	}//getPlanNames
@@ -83,7 +86,7 @@ public class DCServiceImpl implements IDCService {
 
 			return data.getCaseNum();
 		} //if
-		return 0l;
+		return null;
 	}//savePlanSelection
 
 	@Override
@@ -117,7 +120,7 @@ public class DCServiceImpl implements IDCService {
 	public Long saveKidsDetails(CreateChildRequest childrensDetails) {
 		Optional<DCCasesEntity> entity = casesRepository.findById(childrensDetails.getCaseNum());
 		if (entity.isPresent()) {
-			childrensDetails.getChildrenDetails().forEach(child->{
+			childrensDetails.getChildrenDetails().forEach(child -> {
 				DCChildrensEntity entity1 = new DCChildrensEntity();
 				BeanUtils.copyProperties(child, entity1);
 				entity1.setCaseNum(childrensDetails.getCaseNum());
@@ -139,13 +142,13 @@ public class DCServiceImpl implements IDCService {
 
 		List<DCChildrensEntity> childrenEntity = childrensRepository.findByCaseNum(caseNumber);
 		List<ChildrensDetails> childrensDetails = new ArrayList<>();
-		childrenEntity.forEach(child->{
+		childrenEntity.forEach(child -> {
 			ChildrensDetails details = new ChildrensDetails();
 			BeanUtils.copyProperties(child, details);
 			childrensDetails.add(details);
 		});
 		summary.setChildrensDetails(childrensDetails);
-		
+
 		DCEducationEntity educationEntity = educationRepository.findByCaseNum(caseNumber);
 		EducationDetails educationDetails = new EducationDetails();
 		BeanUtils.copyProperties(educationEntity, educationDetails);
@@ -153,13 +156,13 @@ public class DCServiceImpl implements IDCService {
 
 		DCCasesEntity entity = casesRepository.findByCaseNum(caseNumber);
 		String planName = "";
-		if(entity!=null){
+		if (entity != null) {
 			Integer planId = entity.getPlanId();
 			Optional<PlanEntity> byId = planRepository.findById(planId);
-			if(byId.isPresent()){
+			if (byId.isPresent()) {
 				planName = byId.get().getPlanName();
-			}//if
-		}//if
+			} //if
+		} //if
 		summary.setPlanName(planName);
 
 		return summary;

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mk.dto.CreateCaseResponse;
@@ -20,6 +21,7 @@ import com.mk.dto.SummaryScreen;
 import com.mk.service.IDCService;
 
 @RestController
+@RequestMapping("/data")
 public class DCController {
 
 	@Autowired
@@ -90,9 +92,9 @@ public class DCController {
 	@PostMapping("/saveChildrens")
 	public ResponseEntity<SummaryScreen> saveKidsDetailsData(@RequestBody CreateChildRequest childrensDetails) {
 		Long caseNumber = service.saveKidsDetails(childrensDetails);
-		
+
 		SummaryScreen summaryScreen = service.displaySummaryScreen(caseNumber);
-		
+
 		if (caseNumber != 0) {
 			return new ResponseEntity<SummaryScreen>(summaryScreen, HttpStatus.CREATED);
 		} //if
@@ -100,10 +102,9 @@ public class DCController {
 			return new ResponseEntity<SummaryScreen>(summaryScreen, HttpStatus.INTERNAL_SERVER_ERROR);
 		} //else
 	}//saveKidsDetailsData
-	
+
 	@GetMapping("/summary/{caseNumber}")
-	public ResponseEntity<SummaryScreen> displaySummary(@PathVariable Long caseNumber)
-	{
+	public ResponseEntity<SummaryScreen> displaySummary(@PathVariable Long caseNumber) {
 		SummaryScreen summary = service.displaySummaryScreen(caseNumber);
 		return new ResponseEntity<SummaryScreen>(summary, HttpStatus.OK);
 	}
