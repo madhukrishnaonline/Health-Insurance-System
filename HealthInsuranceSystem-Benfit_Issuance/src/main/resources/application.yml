@@ -1,38 +1,11 @@
-server:
-  port: 6060
-  
-#Database Properties  
+#Configure Properties from Config Server
 spring:
-  datasource:
-    driver-class-name: oracle.jdbc.driver.OracleDriver
-    password: oracle
-    url: jdbc:oracle:thin:@localhost:1521:orcl
-    username: java17
- #JPA Properties    
-  jpa:
-    database-platform: org.hibernate.dialect.OracleDialect
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-   #java Mail Properties
-  mail: 
-    host: smtp.gmail.com
-    port: 587
-    username: mk9032605@gmail.com
-    password: kxws bjwq kcsj nwbx
-    properties: 
-      mail: 
-        smtp: 
-          auth: true
-          starttls: 
-            enable: true
+  config:
+    import: optional:configserver:http://localhost:9999
+  profiles:
+    active: default
+  application:
+    name: HealthInsurance-Benfit_Issuance
 
-#spring.mail.transport.protocol=smtp
-
-#spring.mail.properties.mail.smtp.starttls.required=true
-
-#spring.mail.properties.mail.smtp.connectiontimeout=5000
-#
-#spring.mail.properties.mail.smtp.timeout=5000
-#
-#spring.mail.properties.mail.smtp.writetimeout=5000
+server:
+  port: 6161

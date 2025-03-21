@@ -1,6 +1,7 @@
 package com.mk.repository;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,6 @@ import com.mk.entity.EligibilityEntity;
 public interface EligibilityEntityRepo extends JpaRepository<EligibilityEntity, Serializable> {
 
 	Optional<EligibilityEntity> findByCaseNum(Long caseNumber);
+
+	List<EligibilityEntity> findByPlanStatus(String status);
 }//interface
