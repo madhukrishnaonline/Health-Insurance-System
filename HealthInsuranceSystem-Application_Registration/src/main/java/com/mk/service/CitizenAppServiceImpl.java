@@ -1,5 +1,7 @@
 package com.mk.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,14 +22,15 @@ public class CitizenAppServiceImpl implements ICitizenAppService {
 		String url = "http://localhost:5050/ssa-web-api/ssn/{ssn}";
 
 		WebClient webClient = WebClient.create();
-		String stateName = webClient.get().uri(url,citizenApp.getSsn()).retrieve().bodyToMono(String.class).block();
+		Optional<String> stateName = Optional
+				.ofNullable(webClient.get().uri(url, citizenApp.getSsn()).retrieve().bodyToMono(String.class).block());
 
-		if (stateName.equals("New Jersy")) {
+		if (stateName.isPresent() && stateName.get().equals("New Jersy")) {
 			CitizenAppEntity appEntity = new CitizenAppEntity();
 			BeanUtils.copyProperties(citizenApp, appEntity);
-			appEntity.setStateName(stateName);
+			appEntity.setStateName(stateName.get());
 			CitizenAppEntity save = repository.save(appEntity);
-			return save.getApp_id();
+			return save.getAppId();
 		} //if
 		return 0;
 	}
