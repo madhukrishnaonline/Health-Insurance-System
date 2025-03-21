@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: HealthInsuranceSystem-ConfiServer
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/madhukrishnaonline/Config-Server-YML.git
+          clone-on-start: true
+server:
+  port: 9999
