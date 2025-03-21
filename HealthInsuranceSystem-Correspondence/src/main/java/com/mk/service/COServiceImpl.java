@@ -3,8 +3,10 @@ package com.mk.service;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -37,8 +39,8 @@ import com.mk.repository.EligibilityEntityRepo;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Service
 @Slf4j
+@Service
 public class COServiceImpl implements ICOService {
 
 	@Autowired
@@ -63,7 +65,7 @@ public class COServiceImpl implements ICOService {
 		CitizenAppEntity appEntity = null;
 		EligibilityEntity eligibilityEntity = null;
 		//1) Read all pending triggers available in CO_TRIGGERS table
-		List<CoTriggerEntity> triggerEntity = triggerRepository.findByTrgStatus("Pending");
+		List<CoTriggerEntity> triggerEntity = triggerRepository.findByTrStatus("Pending");
 		statusResponse.setTotalTriggers(triggerEntity.size());
 
 		//2) For Each Pending Trigger generate a PDF with citizen eligiblity details in table format
@@ -78,7 +80,7 @@ public class COServiceImpl implements ICOService {
 				public Object call() throws Exception {
 					try {
 						processTrigger(appEntity, eligibilityEntity, entity);
-						//success++;
+						//						success++;
 					} //try
 					catch (Exception e) {
 						e.printStackTrace();
@@ -87,8 +89,6 @@ public class COServiceImpl implements ICOService {
 					return null;
 				}//call()
 			});
-			//get eligible data based on caseNumber
-
 			statusResponse.setSuccessTriggers(success);
 			statusResponse.setFailedTriggers(failed);
 		} //for
@@ -209,18 +209,31 @@ public class COServiceImpl implements ICOService {
 		file.delete();
 	}//generatePDF
 
-	private void updateTriggerData(Long caseNumber, File file) throws Exception {
+	private void updateTriggerData(Long caseNumber, File file) {
 		CoTriggerEntity triggerEntity = triggerRepository.findByCaseNum(caseNumber);
+		try (FileInputStream inputStream = new FileInputStream(file)) {
+			long fileSize = file.length();
 
-		/*byte[] arr = new byte[(byte)file.length()];
-		FileInputStream inputStream = new FileInputStream(file);
-		inputStream.read(arr);
-		
-		triggerEntity.setCoPdf(arr);*/
-		triggerEntity.setTrgStatus("Completed");
-		triggerRepository.save(triggerEntity);
+			// Ensure file size does not exceed Integer.MAX_VALUE
+			if (fileSize > Integer.MAX_VALUE) {
+				throw new IOException("File too large to process: " + fileSize);
+			}
 
-		//		inputStream.close();
+			byte[] arr = new byte[(int) fileSize];
+			int bytesRead = inputStream.read(arr);
+
+			// Ensure all bytes are read
+			if (bytesRead != fileSize) {
+				throw new IOException("Could not read the entire file.");
+			}
+
+			triggerEntity.setCoPdf(arr);
+			triggerEntity.setTrStatus("Completed");
+			triggerRepository.save(triggerEntity);
+
+		} catch (IOException io) {
+			io.printStackTrace();
+		} //catch
 	}//updateTriggerData
 
 }//class

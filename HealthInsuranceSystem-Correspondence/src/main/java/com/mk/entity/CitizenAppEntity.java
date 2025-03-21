@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,8 +21,9 @@ import lombok.Data;
 public class CitizenAppEntity {
 
 	@Id
+	@Column(name="APP_ID")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private Integer app_id;
+	private Integer appId;
 	
 	@Column(length = 25)
 	private String fullname;
@@ -28,6 +31,7 @@ public class CitizenAppEntity {
 	@Column(length = 25)
 	private String email;
 	
+	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate dob;
 	
 	@Column(length = 10)
@@ -42,12 +46,12 @@ public class CitizenAppEntity {
 	private String stateName;
 	
 	@CreationTimestamp
-	@Column(name = "CREATE_DATE")
-	private LocalDate createdate;
+	@Column(name = "CREATE_DATE",updatable = false)
+	private LocalDate createDate;
 	
 	@UpdateTimestamp
-	@Column(name = "UPDATE_DATE")
-	private LocalDate updatedate;
+	@Column(name = "UPDATE_DATE",insertable = false)
+	private LocalDate updateDate;
 	
 	@Column(length = 25)
 	private String createdBy;

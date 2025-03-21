@@ -33,5 +33,4 @@ public class EmailUtils {
 		} //catch
 		return isMailSent;
 	}//mail
-
 }//class

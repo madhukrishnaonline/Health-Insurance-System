@@ -2,6 +2,13 @@ package com.mk.entity;
 
 import java.time.LocalDate;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +19,9 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "PLAN_DETAILS")
+@Table(name = "PLAN_MASTER")
+@SQLDelete(sql = "UPDATE PLAN_MASTER SET STATUS='INACTIVE' WHERE PLAN_ID=?")
+@SQLRestriction(value = "STATUS <> 'INACTIVE'")
 public class PlanEntity {
 
 	@Id
@@ -24,9 +33,11 @@ public class PlanEntity {
 	private String planName;
 	
 	@Column(name="PLAN_START_DATE")
+	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate planStartDate;
 	
 	@Column(name="PLAN_END_DATE")
+	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate planEndDate;
 	
 	@Column(name="PLAN_CATEGORY_ID")
@@ -38,10 +49,14 @@ public class PlanEntity {
 	@Column(name="UPDATED_BY")
 	private String updatedBy;
 	
-	@Column(name="CREATED_TIME")
+	@CreationTimestamp
+	@Column(name="CREATED_TIME",updatable = false)
 	private LocalDate createdTime;
 	
-	@Column(name="UPDATED_TIME")
+	@UpdateTimestamp
+	@Column(name="UPDATED_TIME",insertable = false)
 	private LocalDate updatedTime;
-
+	
+	@Column(name="STATUS")
+	private String status = "ACTIVE";
 }//class

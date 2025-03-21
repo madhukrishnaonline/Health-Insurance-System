@@ -11,7 +11,7 @@ import com.mk.entity.CoTriggerEntity;
 @Repository
 public interface CoTriggerRepository extends JpaRepository<CoTriggerEntity, Serializable> {
 
-	List<CoTriggerEntity> findByTrgStatus(String status);
+	List<CoTriggerEntity> findByTrStatus(String status);
 
 	CoTriggerEntity findByCaseNum(Long caseNumber);
 
