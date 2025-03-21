@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,6 +41,7 @@ public class UserManagement {
 	private String gender;
 
 	@Column(name = "DATE_OF_BIRTH")
+	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate dob;
 
 	private Integer ssn;
@@ -47,11 +50,11 @@ public class UserManagement {
 	private String status;
 
 	@CreationTimestamp
-	@Column(name = "CREATED_DATE")
+	@Column(name = "CREATED_DATE",updatable = false)
 	private LocalDate createdDate;
 
 	@UpdateTimestamp
-	@Column(name = "UPDATED_DATE")
+	@Column(name = "UPDATED_DATE",insertable = false)
 	private LocalDate updatedDate;
 
 	@Column(name = "CREATED_BY")

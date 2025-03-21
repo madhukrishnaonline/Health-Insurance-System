@@ -1,0 +1,10 @@
+#Configure Properties from Config Server
+spring:
+  config:
+    import: optional:configserver:http://localhost:9999
+  profiles:
+    active: default
+  application:
+    name: HealthInsurance-User_Management
+server:
+  port: 3030

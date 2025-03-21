@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mk.dto.ActivateAccount;
@@ -20,6 +21,7 @@ import com.mk.dto.UserData;
 import com.mk.service.IUserService;
 
 @RestController
+@RequestMapping("/user")
 public class UserMangeController {
 
 	@Autowired
@@ -28,7 +30,7 @@ public class UserMangeController {
 	@PostMapping("/register")
 	public ResponseEntity<String> registerUser(@RequestBody UserData user) {
 		String response = service.registerUser(user);
-		if (response.equals("register Successfull")) {
+		if (response.equals("Registration Successfull")) {
 			return new ResponseEntity<String>(response, HttpStatus.CREATED);
 		} //if
 		else if (response.equals("User Already Registerd")) {
@@ -56,11 +58,11 @@ public class UserMangeController {
 	@PostMapping("/login")
 	public ResponseEntity<String> loginUser(@RequestBody LoginApp login) {
 		String loginUser = service.loginUser(login);
-		if (loginUser.equals("")) {
-			return new ResponseEntity<String>("User", HttpStatus.OK);
+		if (loginUser.equals("Login Successfull")) {
+			return new ResponseEntity<String>(loginUser, HttpStatus.OK);
 		} //if
 		else {
-			return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<String>(loginUser, HttpStatus.NOT_FOUND);
 		} //else
 	}//login
 
@@ -77,7 +79,7 @@ public class UserMangeController {
 
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<String> deleteUser(@PathVariable Integer id) {
-		Boolean delete = service.deleteUserById(id);
+		boolean delete = service.deleteUserById(id);
 
 		if (delete) {
 			return new ResponseEntity<String>("User Deleted Successfully", HttpStatus.GONE);
@@ -89,7 +91,7 @@ public class UserMangeController {
 
 	@PutMapping("/update")
 	public ResponseEntity<String> updateUserInfo(@RequestBody UserData userData) {
-		Boolean updateUser = service.updateUser(userData);
+		boolean updateUser = service.updateUser(userData);
 		if (updateUser) {
 			return new ResponseEntity<String>("User Updated Successfully", HttpStatus.OK);
 		} //if
@@ -111,7 +113,7 @@ public class UserMangeController {
 
 	@PatchMapping("/status/{id}/{status}")
 	public ResponseEntity<String> changeStatus(@PathVariable Integer id, @PathVariable String status) {
-		Boolean changeStatus = service.changeStatus(id, status);
+		boolean changeStatus = service.changeStatus(id, status);
 		if (changeStatus) {
 			return new ResponseEntity<String>(status, HttpStatus.OK);
 		} //if
@@ -120,4 +122,13 @@ public class UserMangeController {
 		} //else
 	}//chageStatus()
 
+	@GetMapping("/user/{id}")
+	public ResponseEntity<UserData> fetchUserById(@PathVariable Integer id) {
+		UserData userData = service.getUserById(id);
+		if (userData != null) {
+			return new ResponseEntity<UserData>(userData, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<UserData>(userData, HttpStatus.NOT_FOUND);
+		}
+	}
 }//class

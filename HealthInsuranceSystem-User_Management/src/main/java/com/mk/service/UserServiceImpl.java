@@ -30,7 +30,7 @@ public class UserServiceImpl implements IUserService {
 
 	@Autowired
 	private EmailUtils emailUtils;
-	
+
 	private Random random = new Random();
 
 	@Override
@@ -49,7 +49,7 @@ public class UserServiceImpl implements IUserService {
 			String mailBody = sendMailBody(userInfo.getName(), userInfo.getPassword(), fileName);
 			emailUtils.sendMail(userInfo.getEmail(), sub, mailBody);
 
-			if (data.getId()== null) {
+			if (data.getId() == null) {
 				return "register failed";
 			} //if
 			return "Registration Successfull";
@@ -86,36 +86,37 @@ public class UserServiceImpl implements IUserService {
 	public String loginUser(LoginApp login) {
 		UserManagement data = repository.findByEmailAndPassword(login.getEmail(), login.getPassword());
 		if (data != null) {
-			return "Login Successfull";
+			if (data.getStatus().equals("ACTIVE")) {
+				return "Login Successfull";
+			}
+			return "Login Failed";
 		} //if
 		else {
-			return "Login Failed";
+			return "Invalid Credentials";
 		} //else
 	}//loginUser
 
 	@Override
 	public List<UserData> getAllUsers() {
-
 		List<UserData> userData = new ArrayList<>();
 		List<UserManagement> findAll = repository.findAll();
-		for(UserManagement entity:findAll)
-		{
+		for (UserManagement entity : findAll) {
 			UserData user = new UserData();
 			BeanUtils.copyProperties(entity, user);
 			userData.add(user);
-		}//for
+		} //for
 		return userData;
 	}//getAllUsers
-	
+
 	@Override
-	public Boolean changeStatus(Integer id, String status) {
+	public boolean changeStatus(Integer id, String status) {
 		Optional<UserManagement> byId = repository.findById(id);
-		if(!byId.isEmpty())
-		{
+		if (!byId.isEmpty()) {
 			UserManagement user = byId.get();
 			user.setStatus(status);
+			repository.save(user);
 			return true;
-		}//if
+		} //if
 		return false;
 	}//changeStatus()
 
@@ -123,7 +124,7 @@ public class UserServiceImpl implements IUserService {
 	public UserData getUserById(Integer id) {
 		Optional<UserManagement> id2 = repository.findById(id);
 		UserData userData = new UserData();
-		if (id2.isEmpty()) {
+		if (id2.isPresent()) {
 			UserManagement user = id2.get();
 			BeanUtils.copyProperties(user, userData);
 		} //if
@@ -135,7 +136,7 @@ public class UserServiceImpl implements IUserService {
 	}//getUserById
 
 	@Override
-	public Boolean updateUser(UserData user) {
+	public boolean updateUser(UserData user) {
 		UserManagement data = new UserManagement();
 		BeanUtils.copyProperties(user, data);
 		repository.save(data);
@@ -143,7 +144,7 @@ public class UserServiceImpl implements IUserService {
 	}//updateUser
 
 	@Override
-	public Boolean deleteUserById(Integer id) {
+	public boolean deleteUserById(Integer id) {
 		repository.deleteById(id);
 		return true;
 	}
@@ -181,11 +182,10 @@ public class UserServiceImpl implements IUserService {
 	}//randomPWd
 
 	private String sendMailBody(String fullName, String pwd, String fileName) {
-		String url = "http://localhost:8080/activate";
+		final String url = "http://localhost:3030/activate";
 		String mailBody = null;
-		try(FileReader reader = new FileReader(fileName);
-			BufferedReader bufferedReader = new BufferedReader(reader);) 
-		{
+		try (FileReader reader = new FileReader(fileName);
+				BufferedReader bufferedReader = new BufferedReader(reader);) {
 			StringBuilder builder = new StringBuilder();
 			String line = bufferedReader.readLine();
 			while (line != null) {
@@ -199,7 +199,7 @@ public class UserServiceImpl implements IUserService {
 			mailBody = mailBody.replace("{PWD}", pwd);
 		} //try
 		catch (Exception e) {
-			log.error("Exception Occured "+e.getMessage());
+			log.error("Exception Occured " + e.getMessage());
 		} //catch
 		return mailBody;
 	}//sendMail

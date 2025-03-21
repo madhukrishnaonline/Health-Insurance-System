@@ -14,7 +14,7 @@ public interface IUserService {
 
 	String loginUser(LoginApp login);
 
-	Boolean changeStatus(Integer id, String status);
+	boolean changeStatus(Integer id, String status);
 
 	//	UserManagement getUserByEmail(String email);
 
@@ -22,9 +22,9 @@ public interface IUserService {
 
 	UserData getUserById(Integer id);
 
-	Boolean updateUser(UserData user);
+	boolean updateUser(UserData user);
 
-	Boolean deleteUserById(Integer id);
+	boolean deleteUserById(Integer id);
 
 	String forgotPswd(String email);
 }
