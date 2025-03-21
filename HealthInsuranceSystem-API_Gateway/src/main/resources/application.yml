@@ -1,0 +1,61 @@
+eureka:
+   client:
+      service-url: 
+         defualtZone: http://localhost:8761/eureka
+
+spring:
+  cloud:
+    gateway:
+      discovery.locator:
+        enabled: true
+        lowerCaseServiceId: true
+      routes:
+      - id: HealthInsurance-AdminModule
+        uri: lb://HealthInsurance-AdminModule
+        predicates:
+        - Path=/admin/**
+
+      - id: HealthInsurance-Application_Registration
+        uri: lb://HealthInsurance-Application_Registration
+        predicates:
+        - Path=/citizen/**
+
+      - id: HealthInsurance-Benfit_Issuance
+        uri: lb://HealthInsurance-Benfit_Issuance
+        predicates:
+        - Path=/benfit/**
+
+      - id: HealthInsurance-Correspondence
+        uri: lb://HealthInsurance-Correspondence
+        predicates:
+        - Path=/correspondence/**
+
+      - id: HealthInsurance-Data_Collection
+        uri: lb://HealthInsurance-Data_Collection
+        predicates:
+        - Path=/data/**
+
+      - id: HealthInsurance-Eligibility_Determination
+        uri: lb://HealthInsurance-Eligibility_Determination
+        predicates:
+        - Path=/eligibility/**
+
+      - id: HealthInsurance-Reports_API
+        uri: lb://HealthInsurance-Reports_API
+        predicates:
+        - Path=/reports/**
+
+      - id: HealthInsurance-SSA
+        uri: lb://HealthInsurance-SSA
+        predicates:
+        - Path=/ssa-web-api/**
+
+      - id: HealthInsurance-User_Management
+        uri: lb://HealthInsurance-User_Management
+        predicates:
+        - Path=/user/**
+  application:
+    name: HealthInsuranceSystem-API_Gateway
+
+server:
+  port: 7171
