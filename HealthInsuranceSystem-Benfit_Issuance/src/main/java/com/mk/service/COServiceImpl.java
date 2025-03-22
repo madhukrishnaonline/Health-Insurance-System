@@ -21,8 +21,9 @@ public class COServiceImpl implements IBIService {
 	@Autowired
 	private EligibilityEntityRepo eligibilityEntityRepo;
 
-	public void createcsv() {
-		List<EligibilityEntity> appdetails = eligibilityEntityRepo.findByPlanStatus("Approved");
+	@Override
+	public void createCSVOfApprovedCitizens() {
+		List<EligibilityEntity> appdetails = eligibilityEntityRepo.findByPlanStatusIgnoreCase("Approved");
 		List<CitizenForm> cforms = new ArrayList<CitizenForm>();
 
 		for (EligibilityEntity app : appdetails) {
@@ -32,7 +33,7 @@ public class COServiceImpl implements IBIService {
 		}
 
 		//FTP Location
-		String path = "M:\\SPRING\\csv.txt";
+		String path = "M:\\CSV.txt";
 		File file = new File(path);
 		try (FileWriter opfile = new FileWriter(file); CSVWriter writer = new CSVWriter(opfile);) {
 			List<String[]> data = new ArrayList<String[]>();

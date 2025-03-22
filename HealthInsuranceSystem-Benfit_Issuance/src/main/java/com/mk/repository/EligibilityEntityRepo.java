@@ -14,5 +14,5 @@ public interface EligibilityEntityRepo extends JpaRepository<EligibilityEntity, 
 
 	Optional<EligibilityEntity> findByCaseNum(Long caseNumber);
 
-	List<EligibilityEntity> findByPlanStatus(String status);
+	List<EligibilityEntity> findByPlanStatusIgnoreCase(String status);
 }//interface
