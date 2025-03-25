@@ -3,6 +3,8 @@ package com.mk.entity;
 import java.time.LocalDate;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -18,8 +20,8 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "USER_MANAGEMENT")
-//@SQLDelete(sql = "UPDATE USER_MANAGEMENT SET STATUS='INACTIVE' WHERE ID=?")
-//@SQLRestriction(value = "STATUS <> 'INACTIVE'")
+@SQLDelete(sql = "UPDATE USER_MANAGEMENT SET STATUS='INACTIVE' WHERE ID=?")
+@SQLRestriction(value = "STATUS <> 'INACTIVE'")
 public class UserManagement {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,5 +64,4 @@ public class UserManagement {
 
 	@Column(name = "UPDATED_BY")
 	private String updatedBy;
-
 }// class

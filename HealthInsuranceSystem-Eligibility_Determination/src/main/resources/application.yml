@@ -5,6 +5,6 @@ spring:
   profiles:
     active: default
   application:
-    name: HealthInsurance-Eligibility_Determination
+    name: HealthInsurance-Eligibility-Determination
 server:
   port: 4040

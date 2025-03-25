@@ -15,13 +15,13 @@ spring:
         predicates:
         - Path=/admin/**
 
-      - id: HealthInsurance-Application_Registration
-        uri: lb://HealthInsurance-Application_Registration
+      - id: HealthInsurance-Application-Registration
+        uri: lb://HealthInsurance-Application-Registration
         predicates:
         - Path=/citizen/**
 
-      - id: HealthInsurance-Benfit_Issuance
-        uri: lb://HealthInsurance-Benfit_Issuance
+      - id: HealthInsurance-Benfit-Issuance
+        uri: lb://HealthInsurance-Benfit-Issuance
         predicates:
         - Path=/benfit/**
 
@@ -30,18 +30,18 @@ spring:
         predicates:
         - Path=/correspondence/**
 
-      - id: HealthInsurance-Data_Collection
-        uri: lb://HealthInsurance-Data_Collection
+      - id: HealthInsurance-Data-Collection
+        uri: lb://HealthInsurance-Data-Collection
         predicates:
         - Path=/data/**
 
-      - id: HealthInsurance-Eligibility_Determination
-        uri: lb://HealthInsurance-Eligibility_Determination
+      - id: HealthInsurance-Eligibility-Determination
+        uri: lb://HealthInsurance-Eligibility-Determination
         predicates:
         - Path=/eligibility/**
 
-      - id: HealthInsurance-Reports_API
-        uri: lb://HealthInsurance-Reports_API
+      - id: HealthInsurance-Reports-API
+        uri: lb://HealthInsurance-Reports-API
         predicates:
         - Path=/reports/**
 
@@ -50,12 +50,12 @@ spring:
         predicates:
         - Path=/ssa-web-api/**
 
-      - id: HealthInsurance-User_Management
-        uri: lb://HealthInsurance-User_Management
+      - id: HealthInsurance-User-Management
+        uri: lb://HealthInsurance-User-Management
         predicates:
         - Path=/user/**
   application:
-    name: HealthInsuranceSystem-API_Gateway
+    name: HealthInsuranceSystem-API-Gateway
 
 server:
   port: 7171

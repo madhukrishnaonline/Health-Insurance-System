@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: HealthInsuranceSystem-AdminServer
+server:
+  port: 9898
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

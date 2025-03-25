@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class ReportsResponse {
-	private String name;
-	private String email;
+	private String holderName;
+	private String holderMail;
 	private Long mobile;
 	private String gender;
-	private Integer ssn;
+	private Long holderSsn;
 }//class

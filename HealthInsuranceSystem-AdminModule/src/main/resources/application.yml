@@ -17,7 +17,3 @@ plans-api:
     plandeletefail: Plan Not Deleted
 server:
   port: 4646
-
-#		spring.boot.admin.client.url=http://localhost:9999
-#		management.endpoints.web.exposure.include=*
-#		management.endpoint.health.show-details=always

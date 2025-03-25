@@ -5,7 +5,7 @@ spring:
   profiles:
     active: default
   application:
-    name: HealthInsurance-Application_Registration
+    name: HealthInsurance-Application-Registration
 
 #server port
 server:

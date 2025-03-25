@@ -7,5 +7,7 @@ spring:
         git:
           uri: https://github.com/madhukrishnaonline/Config-Server-YML.git
           clone-on-start: true
+          username: ${GITHUB_USERNAME}
+          password: ${GITHUB_TOKEN}
 server:
   port: 9999

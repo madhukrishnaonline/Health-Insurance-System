@@ -5,6 +5,6 @@ spring:
   profiles:
     active: default
   application:
-    name: HealthInsurance-Data_Collection
+    name: HealthInsurance-Data-Collection
 server:
   port: 3131

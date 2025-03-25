@@ -85,6 +85,9 @@ public class EDServiceImpl implements IEDService {
 		BeanUtils.copyProperties(determineElgble, entity);
 		
 		entity.setHolderName(citizenEntity.getFullname());
+		entity.setHolderMail(citizenEntity.getEmail());
+		entity.setMobile(citizenEntity.getPhone());
+		entity.setGender(citizenEntity.getGender());
 		entity.setCaseNum(caseNumber);
 		entity.setHolderSsn(citizenEntity.getSsn());
 		

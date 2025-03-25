@@ -24,7 +24,7 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.mk.dto.ReportsRequest;
 import com.mk.dto.ReportsResponse;
-import com.mk.entity.EligibilityDetails;
+import com.mk.entity.EligibilityEntity;
 import com.mk.repository.ReportsRepository;
 
 import jakarta.servlet.ServletOutputStream;
@@ -45,7 +45,7 @@ public class ReportsServiceImpl implements IReportsService {
 
 	@Override
 	public List<String> getDistinctStatus() {
-		List<EligibilityDetails> all = reportsRepository.findAll();
+		List<EligibilityEntity> all = reportsRepository.findAll();
 		List<String> status = all.stream().map(aStatus -> aStatus.getPlanStatus()).distinct()
 				.collect(Collectors.toList());
 
@@ -55,7 +55,7 @@ public class ReportsServiceImpl implements IReportsService {
 	@Override
 	public List<ReportsResponse> search(ReportsRequest request) {
 
-		EligibilityDetails queryBuilder = new EligibilityDetails();
+		EligibilityEntity queryBuilder = new EligibilityEntity();
 
 		if (request.getPlanName() != null && !request.getPlanName().equals("")) {
 			queryBuilder.setPlanName(request.getPlanName());
@@ -73,12 +73,12 @@ public class ReportsServiceImpl implements IReportsService {
 			queryBuilder.setPlanEndDate(request.getPlanEndDate());
 		} //if
 
-		Example<EligibilityDetails> example = Example.of(queryBuilder);
+		Example<EligibilityEntity> example = Example.of(queryBuilder);
 
-		List<EligibilityDetails> entities = reportsRepository.findAll(example);
+		List<EligibilityEntity> entities = reportsRepository.findAll(example);
 
 		List<ReportsResponse> responses = new ArrayList<ReportsResponse>();
-		for (EligibilityDetails entity : entities) {
+		for (EligibilityEntity entity : entities) {
 			ReportsResponse response = new ReportsResponse();
 			BeanUtils.copyProperties(entity, response);
 			responses.add(response);
@@ -88,7 +88,7 @@ public class ReportsServiceImpl implements IReportsService {
 
 	@Override
 	public void generateExcelReport(HttpServletResponse response) throws Exception {
-		List<EligibilityDetails> entities = reportsRepository.findAll();
+		List<EligibilityEntity> entities = reportsRepository.findAll();
 
 		HSSFWorkbook workBook = new HSSFWorkbook();
 		HSSFSheet sheet = workBook.createSheet("Reports-Api");
@@ -101,13 +101,13 @@ public class ReportsServiceImpl implements IReportsService {
 		headerRow.createCell(4).setCellValue("SSN");
 
 		int i = 1;
-		for (EligibilityDetails entity : entities) {
+		for (EligibilityEntity entity : entities) {
 			HSSFRow row = sheet.createRow(i);
-			row.createCell(0).setCellValue(entity.getName());
-			row.createCell(1).setCellValue(entity.getEmail());
+			row.createCell(0).setCellValue(entity.getHolderName());
+			row.createCell(1).setCellValue(entity.getHolderMail());
 			row.createCell(2).setCellValue(entity.getMobile());
 			row.createCell(3).setCellValue(entity.getGender());
-			row.createCell(4).setCellValue(entity.getSsn());
+			row.createCell(4).setCellValue(entity.getHolderSsn());
 
 			i++;
 		} //for
@@ -119,7 +119,7 @@ public class ReportsServiceImpl implements IReportsService {
 
 	@Override
 	public void generatePDFReport(HttpServletResponse response) throws Exception {
-		List<EligibilityDetails> entities = reportsRepository.findAll();
+		List<EligibilityEntity> entities = reportsRepository.findAll();
 
 		Document document = new Document(PageSize.A4);
 		PdfWriter.getInstance(document, response.getOutputStream());
@@ -162,12 +162,12 @@ public class ReportsServiceImpl implements IReportsService {
 		cell.setPhrase(new Phrase("SSN", font));
 		table.addCell(cell);
 
-		for (EligibilityDetails entity : entities) {
-			table.addCell(entity.getName());
-			table.addCell(entity.getEmail());
+		for (EligibilityEntity entity : entities) {
+			table.addCell(entity.getHolderName());
+			table.addCell(entity.getHolderMail());
 			table.addCell(String.valueOf(entity.getMobile()));
 			table.addCell(entity.getGender());
-			table.addCell(String.valueOf(entity.getSsn()));
+			table.addCell(String.valueOf(entity.getHolderSsn()));
 		} //for
 
 		document.add(table);

@@ -5,6 +5,6 @@ spring:
   profiles:
     active: default
   application:
-    name: HealthInsurance-User_Management
+    name: HealthInsurance-User-Management
 server:
   port: 3030
